@@ -1,25 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
 
-function App() {
+var App = () => {
+
+  var [inputEvent, setinputEvent] = useState("")
+
+  var [items, setitems] = useState([])
+
+  
+
+  var itemEvent = (e) => {
+    setinputEvent(e.target.value)
+  }
+
+
+  var addList = () => {
+
+
+    const newArr = [...items];
+    newArr.unshift({
+      id: new Date().toISOString(),
+      title: inputEvent
+    });
+    setitems([...newArr])
+
+    setinputEvent('');
+
+  }
+
+  var deleteItem = (id) => {
+    var x = items.filter(item => item.id !== id);
+    setitems(x)
+    console.log("delete")
+  }
+
+  useEffect(() => {
+
+
+
+  }, []);
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <div className='main_div'>
+        <div className='center_div'>
+          <br />
+          <h1>ToDo list</h1>
+          <br />
+          <input type="text" id='inputval' value={inputEvent} placeholder='Add_a_Items' onChange={itemEvent} />
+          <button className='add' onClick={addList}>+</button>
+            
+          <ol>
+            {
+              items.map((itemval) => {
+                return (
+                  <>
+                    <div className='itembox'>
+                      <button className='deletebtn' onClick={() => deleteItem(itemval.id)}></button>
+                      <li key={itemval.id}>{itemval.title}
+                      <input />
+                      </li>
+
+                    </div>
+
+                  </>
+                )
+              })
+            }
+          </ol>
+        </div>
+
+      </div>
+
+
+    </>)
 }
 
-export default App;
+export default App
