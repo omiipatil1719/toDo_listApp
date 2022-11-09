@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
-
+import EventClick from './EventClick'
 var App = () => {
 
-  var [inputEvent, setinputEvent] = useState("")
-
+  var [inputEvent, setinputEvent] = useState()
   var [items, setitems] = useState([])
+  const [edittextId, setedittextId] = useState()
+  const [edittitle, setedittitle] = useState()
+  const [eventClick, setClickEvent] = useState(false)
 
-  
+
 
   var itemEvent = (e) => {
     setinputEvent(e.target.value)
@@ -14,15 +16,12 @@ var App = () => {
 
 
   var addList = () => {
-
-
     const newArr = [...items];
     newArr.unshift({
       id: new Date().toISOString(),
       title: inputEvent
     });
     setitems([...newArr])
-
     setinputEvent('');
 
   }
@@ -33,11 +32,11 @@ var App = () => {
     console.log("delete")
   }
 
-  useEffect(() => {
-
-
-
-  }, []);
+  const editText = (id, title) => {
+    setClickEvent(true)
+    setedittextId(id)
+    setedittitle(title)
+  }
 
 
 
@@ -50,7 +49,7 @@ var App = () => {
           <br />
           <input type="text" id='inputval' value={inputEvent} placeholder='Add_a_Items' onChange={itemEvent} />
           <button className='add' onClick={addList}>+</button>
-            
+
           <ol>
             {
               items.map((itemval) => {
@@ -59,9 +58,8 @@ var App = () => {
                     <div className='itembox'>
                       <button className='deletebtn' onClick={() => deleteItem(itemval.id)}></button>
                       <li key={itemval.id}>{itemval.title}
-                      <input />
+                        <button className='editbtn' onClick={() => editText(itemval.id, itemval.title)}></button>
                       </li>
-
                     </div>
 
                   </>
@@ -69,10 +67,19 @@ var App = () => {
               })
             }
           </ol>
+
         </div>
 
       </div>
-
+      {
+        <EventClick
+          edittextId={edittextId}
+          edittitle={edittitle}
+          show={eventClick}
+          onHide={() => setClickEvent(false)}
+          items={items}
+          setitems={setitems} />
+      }
 
     </>)
 }
